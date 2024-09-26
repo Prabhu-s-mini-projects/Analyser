@@ -8,7 +8,7 @@
 
 def main()-> None:
     """Starting point of program"""
-    pass
+    print("hello World")
 
 if __name__ == '__main__':
     main()
