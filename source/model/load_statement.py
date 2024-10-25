@@ -1,69 +1,81 @@
 """
 Class Name: LoadStatement.py
-Blue+print of:Loads the bank statement and share the results
+Purpose: Loads the bank statement and convert into pd dataframe
 """
 # Dependencies
-import os
-from datetime import datetime as dt
 import pandas as pd
 
 # Internal Dependencies
-from source.framework.logger import log
-from source.framework.constants import Tag
-
+from source.framework.library.a_integrator import LOG, CONFIG, Tag
 
 # CONSTANTS
 
 class LoadStatement:
     """
-    Purpose: Blueprint of Loads the bank statement and share the results
-    Attributes:
-        file_path : str
-        __column_mapping: dict
+    Purpose: Loads the bank statement and convert into pd dataframe
     Methods:
-        __load_csv : loads the csv file and returns the data
-        __validate_columns: Validates that required columns are present after mapping.
-        __rename_columns: Renames columns using user-provided mapping.
-        __clean_data: Cleans up text fields, converts date and amount fields.
-        get_transactions: Returns the cleaned and validated DataFrame.
+        __load_csv :loads the csv file and returns the data
+        __load_statements : Get all the account statements from the location
     """
 
-    def __init__(self,file_path, **kwargs):
+    def __init__(self):
         """
-        Attributes:
-            file_path : str
+        Attributes: all the attributes are fetched from a config file
+            credit_cards_statements : dict
+            checking_account_statements: dict
+            dir_path : str
         """
-        self.file_path: str = file_path
-        self.__column_mapping: dict = kwargs.get("column_mapping")
-        self.__transaction_table: pd.DataFrame = None
+        self.dir_path = \
+            CONFIG.get(section="statement_settings",option="location")
+        self.__credit_cards_statements: dict = \
+            self.__load_statements(account_category = "credit_cards")
+        self.__checking_account_statements:dict = \
+            self.__load_statements(account_category = "checking_accounts")
 
-
-    def __load_csv(self) -> pd.DataFrame | None:
+    @staticmethod
+    def __load_csv(file_path) -> pd.DataFrame | None:
         """ To perform: loads the csv file and returns the data"""
         try:
-            log.info(Tag.MODEL,
-                     message=f"Trying to reading the csv file from {self.file_path = }"
+            LOG.debug(Tag.MODEL,
+                     message=f"Trying to reading the csv file from {file_path = }"
                      )
-            return  pd.read_csv(self.file_path)
+            return  pd.read_csv(file_path)
 
         except (FileNotFoundError, ValueError) as e:
-            log.debug(tag=Tag.MODEL, message=f"csv_file_path = {self.file_path = }")
-            log.exception(tag=Tag.MODEL,message=f"{e = }")
+            LOG.debug(tag=Tag.MODEL, message=f"csv_file_path = {file_path= }")
+            LOG.exception(tag=Tag.MODEL,message=f"{e = }")
+            return None
 
-    def __validate_columns(self)-> bool:
-        """ Validates that required columns are present after mapping"""
-        return True if self.__transaction_table else False
+    def __load_statements(self,account_category: str)-> dict:
+        """Get the all the credit cards from the machines"""
+        LOG.debug(Tag.MODEL, f"will start loading all the {account_category} statements")
 
-    def __rename_columns(self)-> None:
-        """ Renames columns using user-provided mapping """
-        print(self.__rename_columns.__doc__)
+        # Get all the credit cards
+        accounts :list=  CONFIG.options(section = account_category)
 
-    def __clean_data(self)-> None:
-        """Cleans up text fields, converts date and amount fields"""
-        print(self.__clean_data.__doc__)
+        statements: dict = {}
 
-    def get_transactions(self)-> pd.DataFrame:
-        """returns the final validation table that contains the transactions """
-        from_csv_file = self.__load_csv()
-        self.__transaction_table =  from_csv_file
-        return self.__transaction_table
+        # Transverse all the accounts one by one
+        for account in accounts:
+
+            # Getting the path of the statement from settings
+            path = self.dir_path + CONFIG.get(section = account_category, option=account)
+
+            # loading the statement and adding it into a dict
+            statements.update({account:LoadStatement.__load_csv(file_path=path)})
+
+            LOG.debug(Tag.MODEL,f"Load the {account} statement")
+
+        LOG.info(Tag.MODEL, f"Loaded all the {account_category} statements")
+
+        return statements
+
+    @property
+    def get_checking_accounts_statements(self)-> dict:
+        """returns the checking account statements """
+        return self.__checking_account_statements
+
+    @property
+    def get_credit_cards_statements(self) -> dict:
+        """returns the checking account statements """
+        return self.__credit_cards_statements

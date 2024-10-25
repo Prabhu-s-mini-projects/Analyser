@@ -9,7 +9,7 @@ import logging
 import configparser
 
 # Internal Modules
-from source.framework.constants import LOGGER_CONFIG_FILE_PATH
+# N/A
 
 # Class
 class Logger:
@@ -30,7 +30,8 @@ class Logger:
             try:
                 # Read the config file
                 config = configparser.ConfigParser(interpolation=None)
-                config.read(LOGGER_CONFIG_FILE_PATH, encoding='utf-8')
+                config_path = os.path.join(os.getcwd(), 'framework/config/log_settings.ini')
+                config.read(config_path, encoding='utf-8')
 
                 # Get log settings from the config file
                 log_file_name = config.get('log_settings', 'log_file_name')
@@ -77,7 +78,7 @@ class Logger:
                 print(f"An error occurred while setting up logging: {e}")
 
     @staticmethod
-    def __get_logger():
+    def __get_logger()-> logging.Logger:
         """
         Returns a logger instance.
         """
@@ -85,7 +86,7 @@ class Logger:
         return logger
 
     @staticmethod
-    def __log(level, tag="", message=""):
+    def __log(level, tag="", message="")-> None:
         """
         Custom log method that logs with a tag and message.
 
@@ -100,35 +101,35 @@ class Logger:
 
 
     @staticmethod
-    def debug(tag="", message=""):
+    def debug(tag="", message="")-> None:
         """
         Debug level logging with a tag and message.
         """
         Logger.__log(logging.DEBUG, tag, message)
 
     @staticmethod
-    def info(tag="", message=""):
+    def info(tag="", message="")-> None:
         """
         Info level logging with a tag and message.
         """
         Logger.__log(logging.INFO, tag, message)
 
     @staticmethod
-    def error(tag="", message=""):
+    def error(tag="", message="")-> None:
         """
         Error level logging with a tag and message.
         """
         Logger.__log(logging.ERROR, tag, message)
 
     @staticmethod
-    def critical(tag="", message=""):
+    def critical(tag="", message="")-> None:
         """
         Critical level logging with a tag and message.
         """
         Logger.__log(logging.CRITICAL, tag, message)
 
     @staticmethod
-    def exception(tag="", message=""):
+    def exception(tag="", message="")-> None:
         """
         Logs an exception with a stack trace. Should be used inside an `except` block.
         """
@@ -138,4 +139,4 @@ class Logger:
 
 
 # Initialize the logger explicitly when the application starts
-log = Logger()
+LOG = Logger()
