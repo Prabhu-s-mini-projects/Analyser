@@ -3,7 +3,8 @@
 from enum import Enum
 
 # [CONSTANTS]
-LOGGER_CONFIG_FILE_PATH = "/Users/prabhusiva/Projects/PycharmProjects/Analyser/source/framework/config/logger.ini"
+LOGGER_CONFIG_FILE_PATH = "/Users/prabhusiva/Projects/"\
+    "PycharmProjects/Analyser/source/framework/config/logger.ini"
 
 # [Enums]
 class Tag(Enum):

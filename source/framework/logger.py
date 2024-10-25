@@ -7,7 +7,6 @@ import os
 import datetime
 import logging
 import configparser
-import inspect
 
 # Internal Modules
 from source.framework.constants import LOGGER_CONFIG_FILE_PATH
@@ -134,7 +133,8 @@ class Logger:
         Logs an exception with a stack trace. Should be used inside an `except` block.
         """
         logger = Logger.__get_logger()
-        logger.error((" %s [EXCEPTION]",message), exc_info=True, extra={'tag': tag})
+        log_message = f"{message} [EXCEPTION]"
+        logger.error(log_message, exc_info=True, extra={'tag': tag})
 
 
 # Initialize the logger explicitly when the application starts
