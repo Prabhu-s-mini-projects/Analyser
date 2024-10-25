@@ -30,7 +30,7 @@ class Logger:
             try:
                 # Read the config file
                 config = configparser.ConfigParser(interpolation=None)
-                config_path = os.path.join(os.path.dirname(__file__), 'logger.ini')
+                config_path = os.path.join(os.getcwd(), 'framework/config/log_settings.ini')
                 config.read(config_path, encoding='utf-8')
 
                 # Get log settings from the config file
@@ -139,4 +139,4 @@ class Logger:
 
 
 # Initialize the logger explicitly when the application starts
-log = Logger()
+LOG = Logger()

@@ -1,14 +1,12 @@
 """ Contains ENUMs and CONSTANTS """
 # Dependencies
 from enum import Enum
-import logger
-import config_manager
+from source.framework.library import logger, config_manager
 
 
 # [CONSTANTS]
 CONFIG = config_manager.CONFIG
-LOG = logger.log
-
+LOG = logger.LOG
 
 # [Enums]
 class Tag(Enum):
@@ -20,7 +18,3 @@ class Tag(Enum):
 
     def __str__(self):
         return self.value  # Return the value directly when str() is called
-
-
-
-
