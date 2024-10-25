@@ -6,7 +6,7 @@ Purpose: Loads the bank statement and convert into pd dataframe
 import pandas as pd
 
 # Internal Dependencies
-from source.framework.lib.a_integrator import *
+from source.framework.library.a_integrator import LOG, CONFIG, Tag
 
 # CONSTANTS
 
@@ -44,6 +44,7 @@ class LoadStatement:
         except (FileNotFoundError, ValueError) as e:
             LOG.debug(tag=Tag.MODEL, message=f"csv_file_path = {file_path= }")
             LOG.exception(tag=Tag.MODEL,message=f"{e = }")
+            return None
 
     def __load_statements(self,account_category: str)-> dict:
         """Get the all the credit cards from the machines"""
