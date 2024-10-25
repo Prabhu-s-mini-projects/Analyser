@@ -9,7 +9,7 @@ import logging
 import configparser
 
 # CONSTANTS
-CONFIG_PATH = "/Users/prabhusiva/Projects/PycharmProjects/Analyser/source/framework/ini_files/config.ini"
+CONFIG_PATH = "/Analyser/source/framework/config/logger.ini"
 
 class Logger:
     """ Centralized place for logging the data"""
@@ -58,7 +58,12 @@ class Logger:
                 print(f"Log level: {log_level}")
 
                 # Need to config logger
-
+                # Set up logging configuration
+                logging.basicConfig(
+                    level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    filename= log_filename+ ".log"
+                )
 
 
                 self._initialized = True
