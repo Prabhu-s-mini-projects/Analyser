@@ -8,7 +8,9 @@ from datetime import datetime as dt
 import pandas as pd
 
 # Internal Dependencies
-from source.framework.logger import Logger
+from source.framework.logger import log
+from source.framework.constants import Tag
+
 
 # CONSTANTS
 
@@ -37,10 +39,17 @@ class LoadStatement:
         self.__transaction_table: pd.DataFrame = None
 
 
-    def __load_csv(self) -> pd.DataFrame:
+    def __load_csv(self) -> pd.DataFrame | None:
         """ To perform: loads the csv file and returns the data"""
-        Logger.info(tag=__name__,message="reading the csv file from {self.file_path = }")
-        return pd.read_csv(self.file_path)
+        try:
+            log.info(Tag.MODEL,
+                     message=f"Trying to reading the csv file from {self.file_path = }"
+                     )
+            return  pd.read_csv(self.file_path)
+
+        except (FileNotFoundError, ValueError) as e:
+            log.debug(tag=Tag.MODEL, message=f"csv_file_path = {self.file_path = }")
+            log.exception(tag=Tag.MODEL,message=f"{e = }")
 
     def get_transactions(self)-> pd.DataFrame:
         """returns the final validation table that contains the transactions """
