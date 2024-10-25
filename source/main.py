@@ -3,22 +3,22 @@
 # Dependencies
 
 # Internal Modules
-from source.framework.logger import log
-from source.model.load_statement import LoadStatement
+from source.framework.lib.a_integrator import LOG
+
 
 # CONSTANTS
+
 
 def main()-> None:
     """Starting point of program"""
     print("hello World")
-    log.info(tag="MAIN",message="Hello World")
-    chase_statement = LoadStatement(file_path=None)
-    chase_statement.get_transactions()
-    log.info(tag="MAIN", message="Hello World")
-    log.info(tag="MAIN", message="Hello World")
-    log.info(tag="MAIN", message="Hello World")
-    log.info(tag="MAIN", message="Hello World")
-    log.info(tag="MAIN",message="Hello World")
+    LOG.info(tag="MAIN",message="Hello World")
+
+    LOG.info(tag="MAIN", message="Hello World")
+    LOG.info(tag="MAIN", message="Hello World")
+    LOG.info(tag="MAIN", message="Hello World")
+    LOG.info(tag="MAIN", message="Hello World")
+    LOG.info(tag="MAIN",message="Hello World")
 
 
 
