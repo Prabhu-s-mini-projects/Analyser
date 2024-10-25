@@ -14,22 +14,26 @@ from source.framework.library.logger import LOG
 class ConfigManager:
     """ Manages and responsible for parsing the config file """
     _instance = None
+    _initialized = False  # Declare _initialized at the class level
 
-    @staticmethod
-    def get_instance():
-        """Make it as a singleton class"""
-        if ConfigManager._instance is None:
-            ConfigManager()
-        return ConfigManager._instance
+    def __new__(cls):
+        """ create this to have a single instance for this class"""
+        if cls._instance is None:
+            cls._instance = super(ConfigManager, cls).__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
 
     def __init__(self):
-        if ConfigManager._instance is not None:
-            raise Exception("This class is a singleton!")
+        if not self._initialized:
 
-        ConfigManager._instance = self
-        self.config = configparser.ConfigParser(interpolation=None)
-        config_path = os.path.join(os.getcwd(), 'framework/config/app.ini')
-        self.config.read(config_path, encoding='utf-8')
+            ConfigManager._instance = self
+            self.config = configparser.ConfigParser(interpolation=None)
+            config_path = os.path.join(os.getcwd(), 'framework/config/app.ini')
+            self.config.read(config_path, encoding='utf-8')
+
+            self._initialized = True
+
 
     def get(self, section:str, option:str, fallback:str =None) -> str:
         """ Will read the config file and send the value of a param"""
@@ -54,4 +58,4 @@ class ConfigManager:
             return None
 
 # [CONSTANTS]
-CONFIG = ConfigManager.get_instance()
+CONFIG = ConfigManager()

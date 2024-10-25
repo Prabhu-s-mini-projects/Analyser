@@ -11,10 +11,10 @@ LOG = logger.LOG
 # [Enums]
 class Tag(Enum):
     """To use it as part of tag"""
-    MODEL = "MODEL"
-    VIEW = "VIEW"
-    CONTROLLER = "CONTROLLER"
-    CONFIG = "SETTINGS"
+    MODEL   = "MODEL"
+    VIEW    = "VIEW "
+    CTRL    = "CTRL "
+    CONFIG  = "CONFI"
 
     def __str__(self):
         return self.value  # Return the value directly when str() is called

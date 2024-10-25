@@ -27,9 +27,9 @@ class LoadStatement:
         """
         self.dir_path = \
             CONFIG.get(section="statement_settings",option="location")
-        self.credit_cards_statements: dict = \
+        self.__credit_cards_statements: dict = \
             self.__load_statements(account_category = "credit_cards")
-        self.checking_account_statements:dict = \
+        self.__checking_account_statements:dict = \
             self.__load_statements(account_category = "checking_accounts")
 
     @staticmethod
@@ -69,3 +69,13 @@ class LoadStatement:
         LOG.info(Tag.MODEL, f"Loaded all the {account_category} statements")
 
         return statements
+
+    @property
+    def get_checking_accounts_statements(self)-> dict:
+        """returns the checking account statements """
+        return self.__checking_account_statements
+
+    @property
+    def get_credit_cards_statements(self) -> dict:
+        """returns the checking account statements """
+        return self.__credit_cards_statements
