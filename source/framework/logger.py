@@ -74,7 +74,7 @@ class Logger:
                 self._initialized = True
             except (configparser.NoSectionError, configparser.NoOptionError) as e:
                 print(f"Error reading configuration file: {e}")
-            except Exception as e:
+            except (FileNotFoundError, ValueError) as e:
                 print(f"An error occurred while setting up logging: {e}")
 
     @staticmethod
@@ -134,7 +134,7 @@ class Logger:
         Logs an exception with a stack trace. Should be used inside an `except` block.
         """
         logger = Logger.__get_logger()
-        logger.error(f"{message} [EXCEPTION]", exc_info=True, extra={'tag': tag})
+        logger.error((" %s [EXCEPTION]",message), exc_info=True, extra={'tag': tag})
 
 
 # Initialize the logger explicitly when the application starts
