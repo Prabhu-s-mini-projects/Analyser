@@ -151,7 +151,7 @@ class Logger:
         Logger.__log(logging.CRITICAL, tag, message)
 
     @staticmethod
-    def exception(tag="", message="")-> None:
+    def exception(message="")-> None:
         """
         Logs an exception with a stack trace. Should be used inside an `except` block.
         """
