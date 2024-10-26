@@ -25,7 +25,9 @@ class Statements:
         Attributes:
             original_statements : OriginalStatement
         """
-        self.__original_statements: OriginalStatement = kwargs.get("original_statements",OriginalStatement())
+        self.__original_statements: OriginalStatement = kwargs.get(
+            "original_statements",OriginalStatement()
+        )
         self.__formated_statements :dict = {}
         self.transactions:pd.DataFrame = pd.DataFrame(
             columns=TABLE_HEADER
