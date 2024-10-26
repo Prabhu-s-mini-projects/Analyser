@@ -35,7 +35,7 @@ class Statements:
     def get_credit_card_transactions(self) -> None:
         """ returns give all credit card transactions"""
 
-        for account, statement_transactions in self.__formated_statements.items():
+        for statement_transactions in self.__formated_statements.values():
             self.transactions = PandasToolkit.concat_dataframes(
                 self.transactions,statement_transactions, axis=0,
             )
@@ -55,3 +55,7 @@ class Statements:
             self.__formated_statements.update(new_formatted_statement)
 
         LOG.info(Tag.MODEL,"statements are formatted to the desire format")
+
+    def get_original_statements(self)   -> None:
+        """returns all original statements """
+        self.__original_statements.from_all_credit_cards().items()

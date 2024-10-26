@@ -4,7 +4,6 @@
 
 # Internal Modules
 from source.framework.library.a_integrator import LOG
-from source.model.original_statement import OriginalStatement
 from source.model.statements import Statements
 
 

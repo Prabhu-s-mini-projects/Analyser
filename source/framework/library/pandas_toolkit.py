@@ -64,7 +64,8 @@ class PandasToolkit:
         - pd.DataFrame: The concatenated DataFrame.
 
         Raises:
-        - ValueError: If the columns of df1 and df2 do not match when axis=0 (row-wise concatenation).
+        - ValueError: If the columns of df1 and df2
+        do not match when axis=0 (row-wise concatenation).
         """
         if axis == 0:
             # Check if columns match for row-wise concatenation

@@ -77,3 +77,6 @@ class StatementFormatter:
         )
         LOG.debug(Tag.MODEL, f"After adding from account column \n {self.statement= }")
 
+    def get_account_name(self)-> str:
+        """returns the account name"""
+        return self.account_name
