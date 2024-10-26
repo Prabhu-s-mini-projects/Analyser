@@ -60,7 +60,7 @@ class StatementFormatter:
         mapping = {value: key for key, value in mapping_form_config.items()}
 
         self.statement = PandasToolkit.rename_columns(self.statement,columns_mapping=mapping)
-        LOG.debug(f"After renaming column the statements is \n")
+        LOG.debug("After renaming column the statements is")
         LOG.table(table=self.statement, header=self.statement.columns)
 
     def _required_columns(self)-> None:
@@ -68,7 +68,7 @@ class StatementFormatter:
         required_columns = TABLE_HEADER
 
         self.statement = PandasToolkit.filter_columns(self.statement,required_columns)
-        LOG.debug(f"After filtered with required column the statement is ")
+        LOG.debug("After filtered with required column the statement is")
         LOG.table(table=self.statement,header=self.statement.columns)
 
     def _add_from_account_col(self)-> None:
@@ -76,7 +76,7 @@ class StatementFormatter:
         self.statement = PandasToolkit.add_column(
             self.statement,column_name="from_account",value=self.account_name
         )
-        LOG.debug(f"After adding from account column \n")
+        LOG.debug("After adding from account column")
         LOG.table(table=self.statement, header=self.statement.columns)
 
     def get_account_name(self)-> str:

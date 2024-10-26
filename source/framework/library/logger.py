@@ -6,9 +6,10 @@ Blue+print of:Central logging
 import os
 import datetime
 import logging
+import inspect
 import configparser
 from tabulate import tabulate
-import inspect
+
 
 # Internal Modules
 # N/A
@@ -78,16 +79,6 @@ class Logger:
                 print(f"Error reading configuration file: {e}")
             except (FileNotFoundError, ValueError) as e:
                 print(f"An error occurred while setting up logging: {e}")
-
-    def current_function_info():
-        # Get the caller's stack frame information
-        frame = inspect.stack()[1]  # [0] is the current frame, [1] is the caller frame
-        function_name = frame.function
-        file_name = frame.filename
-        line_number = frame.lineno
-        print(f"Function Name: {function_name}")
-        print(f"File Name: {file_name}")
-        print(f"Line Number: {line_number}")
 
     @staticmethod
     def __get_logger()-> logging.Logger:
