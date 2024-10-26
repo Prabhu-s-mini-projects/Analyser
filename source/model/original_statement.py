@@ -1,16 +1,17 @@
 """
-Class Name: LoadStatement.py
+Class Name: OriginalStatement.py
 Purpose: Loads the bank statement and convert into pd dataframe
 """
 # Dependencies
-import pandas as pd
 
 # Internal Dependencies
 from source.framework.library.a_integrator import LOG, CONFIG, Tag
+from source.framework.library.pandas_toolkit import PandasToolkit
+
 
 # CONSTANTS
 
-class LoadStatement:
+class OriginalStatement:
     """
     Purpose: Loads the bank statement and convert into pd dataframe
     Methods:
@@ -29,29 +30,15 @@ class LoadStatement:
             CONFIG.get(section="statement_settings",option="location")
         self.__credit_cards_statements: dict = \
             self.__load_statements(account_category = "credit_cards")
-        self.__checking_account_statements:dict = \
+        self.__checking_accounts_statements:dict = \
             self.__load_statements(account_category = "checking_accounts")
-
-    @staticmethod
-    def __load_csv(file_path) -> pd.DataFrame | None:
-        """ To perform: loads the csv file and returns the data"""
-        try:
-            LOG.debug(Tag.MODEL,
-                     message=f"Trying to reading the csv file from {file_path = }"
-                     )
-            return  pd.read_csv(file_path)
-
-        except (FileNotFoundError, ValueError) as e:
-            LOG.debug(tag=Tag.MODEL, message=f"csv_file_path = {file_path= }")
-            LOG.exception(tag=Tag.MODEL,message=f"{e = }")
-            return None
 
     def __load_statements(self,account_category: str)-> dict:
         """Get the all the credit cards from the machines"""
         LOG.debug(Tag.MODEL, f"will start loading all the {account_category} statements")
 
         # Get all the credit cards
-        accounts :list=  CONFIG.options(section = account_category)
+        accounts :list=  CONFIG.get_options(section = account_category)
 
         statements: dict = {}
 
@@ -61,21 +48,23 @@ class LoadStatement:
             # Getting the path of the statement from settings
             path = self.dir_path + CONFIG.get(section = account_category, option=account)
 
+            new_statement = {
+                account: PandasToolkit.load_csv(file_path=path)
+            }
             # loading the statement and adding it into a dict
-            statements.update({account:LoadStatement.__load_csv(file_path=path)})
+            statements.update(new_statement)
 
-            LOG.debug(Tag.MODEL,f"Load the {account} statement")
+            LOG.debug(Tag.MODEL,f"{account} statement "\
+                                + "Loaded" if new_statement is not  None else "NOT loaded")
 
         LOG.info(Tag.MODEL, f"Loaded all the {account_category} statements")
 
         return statements
 
-    @property
-    def get_checking_accounts_statements(self)-> dict:
+    def from_all_checking_accounts(self)-> dict:
         """returns the checking account statements """
-        return self.__checking_account_statements
+        return self.__checking_accounts_statements
 
-    @property
-    def get_credit_cards_statements(self) -> dict:
+    def from_all_credit_cards(self) -> dict:
         """returns the checking account statements """
         return self.__credit_cards_statements

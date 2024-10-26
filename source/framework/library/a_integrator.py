@@ -7,6 +7,7 @@ from source.framework.library import logger, config_manager
 # [CONSTANTS]
 CONFIG = config_manager.CONFIG
 LOG = logger.LOG
+TABLE_HEADER = ['transaction_date','description','amount','from_account']
 
 # [Enums]
 class Tag(Enum):
