@@ -40,12 +40,12 @@ class ConfigManager:
         try:
             return self.config.get(section, option, fallback=fallback)
         except (configparser.NoSectionError, configparser.NoOptionError) as e:
-            LOG.error("SETTINGS",f"{e = } ")
-            LOG.exception("SETTINGS",f"Warning: Section '{section}' not found in config file.")
+            LOG.error(f"{e = } ")
+            LOG.exception(f"Warning: Section '{section}' not found in config file.")
             return fallback
         except (FileNotFoundError, ValueError) as e:
-            LOG.error("SETTINGS", f"{e = } ")
-            LOG.exception("SETTINGS",f"An error occurred while setting up logging: {e}")
+            LOG.error(f"{e = } ")
+            LOG.exception(f"An error occurred while setting up logging: {e}")
             return fallback
 
     def get_options(self, section:str)-> list | None:
@@ -53,8 +53,8 @@ class ConfigManager:
         try:
             return self.config.options(section)
         except configparser.NoSectionError as e:
-            LOG.error("SETTINGS", f"{e = } ")
-            LOG.exception("SETTINGS", f"Warning: Section '{section}' not found in config file.")
+            LOG.error(f"{e = } ")
+            LOG.exception(f"Warning: Section '{section}' not found in config file.")
             return None
 
     def get_options_pair(self,section:str)-> dict| None:
@@ -62,8 +62,8 @@ class ConfigManager:
         try:
             return dict(self.config.items(section))
         except configparser.NoSectionError as e:
-            LOG.error("SETTINGS", f"{e = } ")
-            LOG.exception("SETTINGS", f"Warning: Section '{section}' not found in config file.")
+            LOG.error(f"{e = } ")
+            LOG.exception(f"Warning: Section '{section}' not found in config file.")
             return None
 
 

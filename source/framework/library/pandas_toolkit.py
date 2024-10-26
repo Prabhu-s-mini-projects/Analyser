@@ -6,12 +6,9 @@ Blue+print of:contains various methods for Dataframe operations
 import pandas as pd
 
 # Internal Dependencies
-from source.framework.library.a_integrator import LOG, Tag
+from source.framework.library.a_integrator import LOG
 
 # [class]
-class InvalidDataFrameError(Exception):
-    """To handle invalid datd frame"""
-
 class PandasToolkit:
     """
     Purpose: Blueprint of contains various methods for Dataframe operations
@@ -21,14 +18,14 @@ class PandasToolkit:
     def load_csv(file_path,**kwargs) -> pd.DataFrame | None:
         """ To perform: loads the csv file and returns the data"""
         try:
-            LOG.debug(Tag.MODEL,
+            LOG.debug(
                      message=f"Trying to reading the csv file from {file_path = }"
                      )
             return  pd.read_csv(file_path,**kwargs)
 
         except (FileNotFoundError, ValueError) as e:
-            LOG.debug(tag=Tag.MODEL, message=f"csv_file_path = {file_path= }")
-            LOG.exception(tag=Tag.MODEL,message=f"{e = }")
+            LOG.debug(message=f"csv_file_path = {file_path= }")
+            LOG.exception(message=f"{e = }")
             return None
 
     @staticmethod
@@ -72,7 +69,7 @@ class PandasToolkit:
             if set(df1.columns) != set(df2.columns):
                 missing_in_df1 = set(df2.columns) - set(df1.columns)
                 missing_in_df2 = set(df1.columns) - set(df2.columns)
-                LOG.error("[Panda]",f"\n {missing_in_df1 = } \n {missing_in_df1 = }")
+                LOG.error(f"\n {missing_in_df1 = } \n {missing_in_df1 = }")
                 raise ValueError(
                     f"Concatenation failed: Columns missing in df1: {missing_in_df1}, "
                     f"Columns missing in df2: {missing_in_df2}"
@@ -100,7 +97,7 @@ class PandasToolkit:
         # Check if all specified columns to rename exist in the DataFrame
         missing_columns = [col for col in columns_mapping if col not in df.columns]
         if missing_columns:
-            LOG.error("[Panda]", f"\n {missing_columns = } ")
+            LOG.error(f"\n {missing_columns = } ")
             raise ValueError(f"Columns not found in DataFrame: {missing_columns}")
 
         # Rename the columns based on the mapping dictionary
@@ -124,7 +121,7 @@ class PandasToolkit:
         # Check if all specified columns exist in the DataFrame
         missing_columns = [col for col in columns if col not in df.columns]
         if missing_columns:
-            LOG.error("[Panda]", f"\n {missing_columns = } ")
+            LOG.error(f"\n {missing_columns = } ")
             raise ValueError(f"Columns not found in DataFrame: {missing_columns}")
 
         # Filter the DataFrame to include only the specified columns
@@ -156,7 +153,7 @@ class PandasToolkit:
             # Add a column with a constant value
             df[column_name] = value
         else:
-            LOG.error("[Panda]", "You must provide either a 'value' or a 'func' parameter")
+            LOG.error("You must provide either a 'value' or a 'func' parameter")
             raise ValueError("You must provide either a 'value' or a 'func' parameter.")
 
         return df

@@ -7,6 +7,8 @@ import os
 import datetime
 import logging
 import configparser
+from tabulate import tabulate
+import inspect
 
 # Internal Modules
 # N/A
@@ -77,6 +79,16 @@ class Logger:
             except (FileNotFoundError, ValueError) as e:
                 print(f"An error occurred while setting up logging: {e}")
 
+    def current_function_info():
+        # Get the caller's stack frame information
+        frame = inspect.stack()[1]  # [0] is the current frame, [1] is the caller frame
+        function_name = frame.function
+        file_name = frame.filename
+        line_number = frame.lineno
+        print(f"Function Name: {function_name}")
+        print(f"File Name: {file_name}")
+        print(f"Line Number: {line_number}")
+
     @staticmethod
     def __get_logger()-> logging.Logger:
         """
@@ -99,33 +111,52 @@ class Logger:
         # Add the tag,
         logger.log(level, message, extra={'tag': tag})
 
+    @staticmethod
+    def get_tag_info(frame_index = 2)-> str:
+        """returns tag mark to file """
+
+        # Get the caller's stack frame information [2] is the actual tag caller.
+        frame = inspect.stack()[frame_index]  # [0] is the current frame, [1] is the caller frame
+        function_name = frame.function
+        file_name = os.path.basename(frame.filename)  # Only get the file name
+        line_number = frame.lineno
+
+        return f'{function_name} -> {file_name} :: {line_number}'
 
     @staticmethod
-    def debug(tag="", message="")-> None:
+    def debug(message="")-> None:
         """
         Debug level logging with a tag and message.
         """
+        tag = Logger.get_tag_info()
+
         Logger.__log(logging.DEBUG, tag, message)
 
     @staticmethod
-    def info(tag="", message="")-> None:
+    def info(message="")-> None:
         """
         Info level logging with a tag and message.
         """
+        tag = Logger.get_tag_info()
+
         Logger.__log(logging.INFO, tag, message)
 
     @staticmethod
-    def error(tag="", message="")-> None:
+    def error(message="")-> None:
         """
         Error level logging with a tag and message.
         """
+        tag = Logger.get_tag_info()
+
         Logger.__log(logging.ERROR, tag, message)
 
     @staticmethod
-    def critical(tag="", message="")-> None:
+    def critical(message="")-> None:
         """
         Critical level logging with a tag and message.
         """
+        tag = Logger.get_tag_info()
+
         Logger.__log(logging.CRITICAL, tag, message)
 
     @staticmethod
@@ -133,9 +164,20 @@ class Logger:
         """
         Logs an exception with a stack trace. Should be used inside an `except` block.
         """
+        tag = Logger.get_tag_info(frame_index=3)  # since after invoke it call 3 layers
         logger = Logger.__get_logger()
         log_message = f"{message} [EXCEPTION]"
         logger.error(log_message, exc_info=True, extra={'tag': tag})
+
+    @staticmethod
+    def table(table=None,header=None)-> None:
+        """
+        Logs an exception with a stack trace. Should be used inside an `except` block.
+        """
+        tag = Logger.get_tag_info()
+
+        log_message = "\n" + tabulate(table, headers=header, tablefmt="grid")
+        Logger.__log(logging.DEBUG, tag, log_message)
 
 
 # Initialize the logger explicitly when the application starts

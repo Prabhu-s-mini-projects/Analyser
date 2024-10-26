@@ -6,7 +6,7 @@ Blue+print of:contains statement from all the account
 import pandas as pd
 
 # Internal Dependencies
-from source.framework.library.a_integrator import LOG, Tag, TABLE_HEADER
+from source.framework.library.a_integrator import LOG, TABLE_HEADER
 from source.framework.library.pandas_toolkit import PandasToolkit
 from source.model.original_statement import OriginalStatement
 from source.model.statement_formatter import StatementFormatter
@@ -42,22 +42,24 @@ class Statements:
                 self.transactions,statement_transactions, axis=0,
             )
 
-        LOG.info(Tag.MODEL,"Transaction table created")
+        LOG.info("credit_card_transactions table created")
 
         return self.transactions
 
     def __format_statements(self)-> None:
         """will reformat each statement into a desired formatted structure"""
 
-        for account, statement in self.__original_statements.from_all_credit_cards().items():
+        for account, statement in self.__original_statements.from_all_credit_cards.items():
+            LOG.debug(f"{account = } ")
+            LOG.table(table=statement,header=statement.columns)
             statement_formatter = StatementFormatter(account_name=account, statement=statement)
             new_formatted_statement = {
                 account:statement_formatter.get_desired_format()
             }
             self.__formated_statements.update(new_formatted_statement)
 
-        LOG.info(Tag.MODEL,"statements are formatted to the desire format")
+        LOG.info("statements are formatted to the desire format")
 
-    def get_original_statements(self)   -> None:
+    def get_original_statements(self) -> None:
         """returns all original statements """
-        self.__original_statements.from_all_credit_cards().items()
+        print(f"{self.__original_statements.from_all_credit_cards}")
