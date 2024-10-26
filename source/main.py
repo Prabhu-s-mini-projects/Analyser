@@ -4,7 +4,7 @@
 
 # Internal Modules
 from source.framework.library.a_integrator import LOG
-from source.model.load_statement import LoadStatement
+from source.model.statements import Statements
 
 
 # CONSTANTS
@@ -13,10 +13,10 @@ from source.model.load_statement import LoadStatement
 def main()-> None:
     """Starting point of program"""
     print("hello World")
-    LOG.info(tag="MAIN",message="Hello World")
-    statements = LoadStatement()
-    print(statements.get_credit_cards_statements)
-    LOG.info(tag="MAIN", message="Hello World")
+    LOG.info(tag="MAIN",message="started")
+    activity = Statements()
+    print(activity.get_credit_card_transactions())
+    LOG.info(tag="MAIN", message="Ended")
 
 
 if __name__ == '__main__':

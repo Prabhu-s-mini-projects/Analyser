@@ -48,7 +48,7 @@ class ConfigManager:
             LOG.exception("SETTINGS",f"An error occurred while setting up logging: {e}")
             return fallback
 
-    def options(self,section:str)-> list | None:
+    def get_options(self, section:str)-> list | None:
         """ returns all the option under a list"""
         try:
             return self.config.options(section)
@@ -56,6 +56,16 @@ class ConfigManager:
             LOG.error("SETTINGS", f"{e = } ")
             LOG.exception("SETTINGS", f"Warning: Section '{section}' not found in config file.")
             return None
+
+    def get_options_pair(self,section:str)-> dict| None:
+        """:returns: the options in key value pair """
+        try:
+            return dict(self.config.items(section))
+        except configparser.NoSectionError as e:
+            LOG.error("SETTINGS", f"{e = } ")
+            LOG.exception("SETTINGS", f"Warning: Section '{section}' not found in config file.")
+            return None
+
 
 # [CONSTANTS]
 CONFIG = ConfigManager()
