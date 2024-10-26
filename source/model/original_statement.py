@@ -5,7 +5,7 @@ Purpose: Loads the bank statement and convert into pd dataframe
 # Dependencies
 
 # Internal Dependencies
-from source.framework.library.a_integrator import LOG, CONFIG, Tag
+from source.framework.library.a_integrator import LOG, CONFIG
 from source.framework.library.pandas_toolkit import PandasToolkit
 
 
@@ -28,14 +28,14 @@ class OriginalStatement:
         """
         self.dir_path = \
             CONFIG.get(section="statement_settings",option="location")
-        self.__credit_cards_statements: dict = \
+        self.__from_all_credit_cards: dict = \
             self.__load_statements(account_category = "credit_cards")
-        self.__checking_accounts_statements:dict = \
+        self.__from_all_checking_accounts:dict = \
             self.__load_statements(account_category = "checking_accounts")
 
     def __load_statements(self,account_category: str)-> dict:
         """Get the all the credit cards from the machines"""
-        LOG.debug(Tag.MODEL, f"will start loading all the {account_category} statements")
+        LOG.debug(f"will start loading all the {account_category} statements")
 
         # Get all the credit cards
         accounts :list=  CONFIG.get_options(section = account_category)
@@ -54,17 +54,19 @@ class OriginalStatement:
             # loading the statement and adding it into a dict
             statements.update(new_statement)
 
-            LOG.debug(Tag.MODEL,f"{account} statement "\
+            LOG.debug(f"{account} statement "\
                                 + "Loaded" if new_statement is not  None else "NOT loaded")
 
-        LOG.info(Tag.MODEL, f"Loaded all the {account_category} statements")
+        LOG.info(f"Loaded all the {account_category} statements")
 
         return statements
 
+    @property
     def from_all_checking_accounts(self)-> dict:
         """returns the checking account statements """
-        return self.__checking_accounts_statements
+        return self.__from_all_checking_accounts
 
+    @property
     def from_all_credit_cards(self) -> dict:
         """returns the checking account statements """
-        return self.__credit_cards_statements
+        return self.__from_all_credit_cards
