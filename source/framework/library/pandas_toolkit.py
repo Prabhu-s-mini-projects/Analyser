@@ -29,7 +29,7 @@ class PandasToolkit:
             return None
 
     @staticmethod
-    def combine_first_column(df :pd.DataFrame,col1 :str, col2 :str, new_column :str):
+    def combine_first_column(df :pd.DataFrame,col1 :str, col2 :str, new_column :str) -> pd.DataFrame:
         """
         Merge two columns in a DataFrame into a new column with an optional separator.
 
@@ -47,7 +47,7 @@ class PandasToolkit:
         return df
 
     @staticmethod
-    def concat_dataframes(df1, df2, axis=0, ignore_index=True):
+    def concat_dataframes(df1, df2, axis=0, ignore_index=True) -> pd.DataFrame:
         """
         Concatenate two DataFrames along rows or columns with column validation.
 
@@ -79,7 +79,7 @@ class PandasToolkit:
         return pd.concat([df1, df2], axis=axis, ignore_index=ignore_index)
 
     @staticmethod
-    def rename_columns(df, columns_mapping):
+    def rename_columns(df, columns_mapping:dict) -> pd.DataFrame:
         """
         Rename columns in the DataFrame based on a dictionary mapping.
 
@@ -104,7 +104,7 @@ class PandasToolkit:
         return df.rename(columns=columns_mapping)
 
     @staticmethod
-    def filter_columns(df, columns):
+    def filter_columns(df, columns:list) -> pd.DataFrame:
         """
         Filter the DataFrame to only include specified columns.
 
@@ -128,7 +128,7 @@ class PandasToolkit:
         return df[columns]
 
     @staticmethod
-    def add_column(df, column_name, value=None, func=None):
+    def add_column(df, column_name, value=None, func=None) -> pd.DataFrame:
         """
         Add a new column to the DataFrame with a constant value or using a function.
 
@@ -155,5 +155,56 @@ class PandasToolkit:
         else:
             LOG.error("You must provide either a 'value' or a 'func' parameter")
             raise ValueError("You must provide either a 'value' or a 'func' parameter.")
+
+        return df
+
+    @staticmethod
+    def filter_rows(df, column_name, condition) -> pd.DataFrame | None:
+        """
+        Filter rows in the DataFrame based on a condition applied to a specified column.
+
+        Parameters:
+        - df (pd.DataFrame): The DataFrame to filter.
+        - column_name (str): The name of the column to apply the condition to.
+        - condition (callable): A function that takes a single value and returns True if the row
+                                should be included in the filtered DataFrame.
+
+        Returns:
+        - pd.DataFrame: The filtered DataFrame containing only rows where the condition is True.
+
+        Raises:
+        - ValueError: If the specified column does not exist in the DataFrame.
+        """
+        if column_name not in df.columns:
+            LOG.error(f"Column '{column_name}' not found in the DataFrame.")
+            raise ValueError(f"Column '{column_name}' not found in the DataFrame.")
+
+        # Apply the condition to the specified column
+        return df[df[column_name].apply(condition)]
+
+    @staticmethod
+    def modify_column(df, column_name, condition, operation):
+        """
+        Modify the values of a specified column based on a condition.
+
+        Parameters:
+        - df (pd.DataFrame): The DataFrame to modify.
+        - column_name (str): The name of the column to apply the condition and operation to.
+        - condition (callable): A function that takes a single value and returns True if
+                                the value should be modified.
+        - operation (callable): A function that takes a value and returns the modified value.
+
+        Returns:
+        - pd.DataFrame: The DataFrame with the modified column.
+
+        Raises:
+        - ValueError: If the specified column does not exist in the DataFrame.
+        """
+        if column_name not in df.columns:
+            LOG.error(f"Column '{column_name}' not found in the DataFrame.")
+            raise ValueError(f"Column '{column_name}' not found in the DataFrame.")
+
+        # Apply the condition and modify the column values using the operation
+        df.loc[df[column_name].apply(condition), column_name] = df[column_name].apply(operation)
 
         return df

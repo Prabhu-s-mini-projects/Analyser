@@ -1,4 +1,5 @@
 """ Starting point of program """
+from venv import logger
 
 # Dependencies
 
@@ -13,7 +14,8 @@ def main()-> None:
     print("hello World")
     LOG.info(message="started")
     activity = Statements()
-    print(activity.get_credit_card_transactions())
+    credit_transactions  = activity.transactions
+    LOG.table(table=credit_transactions,header=credit_transactions.columns)
     LOG.info(message="Ended")
 
 if __name__ == '__main__':
