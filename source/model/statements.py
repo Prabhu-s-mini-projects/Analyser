@@ -1,6 +1,6 @@
 """
 Class Name: Statements.py
-Blue+print of:contains statement from all the account
+Blue+print of:contains statement from all accounts
 """
 # Dependencies
 import pandas as pd
@@ -13,7 +13,7 @@ from source.model.statement_formatter import StatementFormatter
 
 class Statements:
     """
-    Purpose: Blueprint of contains statement from all the account
+    Purpose: Blueprint of contains statement from all accounts
     Attributes:
         __original_statements : OriginalStatement
     Methods:
@@ -28,38 +28,64 @@ class Statements:
         self.__original_statements: OriginalStatement = kwargs.get(
             "original_statements",OriginalStatement()
         )
-        self.__formated_statements :dict = {}
         self.transactions:pd.DataFrame = pd.DataFrame(
             columns=TABLE_HEADER
         )
-        self.__format_statements()
+        self.collect_transactions()
 
-    def get_credit_card_transactions(self) -> None:
-        """ returns give all credit card transactions"""
+    @staticmethod
+    def __format_statements( account:str, statement:pd.DataFrame ) -> pd.DataFrame:
+        """
+        1.
+        :param statement:
+        :return:
+        """
+        LOG.debug(f"{account = } ")
+        LOG.table(table=statement, header=statement.columns)
 
-        for statement_transactions in self.__formated_statements.values():
+        statement_formatter = StatementFormatter(account_name=account, statement=statement)
+
+        formated_statement = statement_formatter.get_desired_format()
+
+        if account in ['citi','discover']:
+
+            # Converts expenditure to negative value and payout to positive value
+            formated_statement = PandasToolkit.modify_column(
+                df=formated_statement,
+                column_name='amount',
+                condition=lambda x: True,
+                operation=lambda x: x * -1
+            )
+
+        LOG.info("statements are formatted to the desired format.")
+
+        return formated_statement
+
+    def collect_transactions(self) -> None:
+        """
+        1. Combine all statements into a single dict
+        2. Traverse each statement one by one and format statement
+        3. Merge the return table into transactions' table
+        returns give all credit card transactions.
+        """
+
+        # Combine all statements (merging 2 dict)
+        statements = \
+            self.__original_statements.from_all_credit_cards\
+            | self.__original_statements.from_all_checking_accounts
+
+        # Traverse each statement one by one
+        for account, statement in statements.items():
+
+            # Formats statement into desired structure
+            formatted_statement = self.__format_statements(
+                account=account,statement=statement
+            )
+
+            # Adds into an existing transactions table
             self.transactions = PandasToolkit.concat_dataframes(
-                self.transactions,statement_transactions, axis=0,
+                self.transactions,
+                formatted_statement
             )
 
         LOG.info("credit_card_transactions table created")
-
-        return self.transactions
-
-    def __format_statements(self)-> None:
-        """will reformat each statement into a desired formatted structure"""
-
-        for account, statement in self.__original_statements.from_all_credit_cards.items():
-            LOG.debug(f"{account = } ")
-            LOG.table(table=statement,header=statement.columns)
-            statement_formatter = StatementFormatter(account_name=account, statement=statement)
-            new_formatted_statement = {
-                account:statement_formatter.get_desired_format()
-            }
-            self.__formated_statements.update(new_formatted_statement)
-
-        LOG.info("statements are formatted to the desire format")
-
-    def get_original_statements(self) -> None:
-        """returns all original statements """
-        print(f"{self.__original_statements.from_all_credit_cards}")

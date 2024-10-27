@@ -53,7 +53,7 @@ class StatementFormatter:
     def _rename_columns(self) -> None:
         """ To perform: will rename columns in the data table"""
 
-        section = self.account_name + "_credit_map"
+        section = self.account_name + "_map"
         mapping_form_config = CONFIG.get_options_pair(section)
 
         # Interchange keys and values
