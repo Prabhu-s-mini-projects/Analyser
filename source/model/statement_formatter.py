@@ -56,7 +56,7 @@ class StatementFormatter:
         if self.account_name in ['citi','discover']:
 
             # Converts expenditure to negative value and payout to positive value
-            formated_statement = PandasToolkit.modify_column(
+            self.statement = PandasToolkit.modify_column(
                 df=self.statement,
                 column_name='amount',
                 condition=lambda x: True,

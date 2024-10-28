@@ -2,21 +2,15 @@
 from platform import processor
 
 # Dependencies
-import pandas as pd
-import matplotlib
-from matplotlib.table import table
 
-from source.controller.processor import Processor
-
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
+# import matplotlib
+# matplotlib.use('TkAgg')
 
 # Internal Modules
 from source.framework.library.a_integrator import LOG
 from source.controller.report import Report
-from source.framework.library.pandas_toolkit import PandasToolkit
 from source.model.statements import Statements
-import json
+from source.controller.processor import Processor
 
 # CONSTANTS
 
@@ -25,11 +19,6 @@ def main()-> None:
     """Starting point of program"""
     print("hello World")
     LOG.info(message="started")
-
-    import logging
-    # Suppress debug messages from matplotlib
-    logging.getLogger('matplotlib').setLevel(logging.WARNING)
-
 
     activity = Statements()
     r_transactions = activity.transactions
