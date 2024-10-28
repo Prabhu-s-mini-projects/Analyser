@@ -29,11 +29,43 @@ class StatementFormatter:
         self.account_name: str = kwargs.get("account_name")
 
     def get_desired_format(self)-> pd.DataFrame:
-        """will combine and return all the tables"""
+        """
+        1. Unifies the amount column be combining debit and credit
+        2. Unifies the column name across statement
+        3. Adds from account columns
+        4. Keeps only the required columns
+        5. Certain bank statements have inverted signs for the expenses
+        6. Changing the date column to date time format
+
+        :return:
+        """
+
+        # Unifies the amount column be combining debit and credit
         self._format_amount_column()
+
+        # Unifies the column name across the statement
         self._rename_columns()
+
+        # Adds from account columns
         self._add_from_account_col()
+
+        # keeps only the required columns
         self._required_columns()
+
+        # Certain banks statements have inverted signs for the expenses
+        if self.account_name in ['citi','discover']:
+
+            # Converts expenditure to negative value and payout to positive value
+            formated_statement = PandasToolkit.modify_column(
+                df=self.statement,
+                column_name='amount',
+                condition=lambda x: True,
+                operation=lambda x: x * -1
+            )
+
+        # Changes the date column to date time format
+        self.statement['transaction_date'] = pd.to_datetime(self.statement['transaction_date'])
+
         return self.statement
 
     def _format_amount_column(self) -> None:

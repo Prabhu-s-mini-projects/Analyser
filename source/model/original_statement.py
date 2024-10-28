@@ -21,7 +21,7 @@ class OriginalStatement:
 
     def __init__(self):
         """
-        Attributes: all the attributes are fetched from a config file
+        Attributes: all the attributes are fetched from a settings file
             credit_cards_statements : dict
             checking_account_statements: dict
             dir_path : str

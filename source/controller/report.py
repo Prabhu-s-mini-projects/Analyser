@@ -26,8 +26,16 @@ class Report:
 
     def earnings(self) -> pd.DataFrame | None:
         """ report amounts received are from the statement """
-        return PandasToolkit.filter_rows(self.statement,column_name='amount',condition=lambda x: x > 0)
+        return PandasToolkit.filter_rows(
+            self.statement,
+            column_name='amount',
+            condition=lambda x: x > 0
+        )
 
-    def expenses(self) -> None:
+    def expenses(self) -> pd.DataFrame | None:
         """ report amount spend """
-        return PandasToolkit.filter_rows(self.statement,column_name='amount',condition=lambda x: x < 0)
+        return PandasToolkit.filter_rows(
+            self.statement,
+            column_name='amount',
+            condition=lambda x: x < 0
+        )

@@ -128,7 +128,7 @@ class PandasToolkit:
         return df[columns]
 
     @staticmethod
-    def add_column(df, column_name, value=None, func=None) -> pd.DataFrame:
+    def add_column(df, column_name, value=None, func=None,source_column=None) -> pd.DataFrame:
         """
         Add a new column to the DataFrame with a constant value or using a function.
 
@@ -139,6 +139,9 @@ class PandasToolkit:
         - func (callable, optional): A function to generate values for the new column.
                                      If provided, it overrides `value`.
                                      The function will be applied row-wise.
+        - source_column (str, optional): The name of an existing column in the DataFrame.
+                                          If provided, the new column values will be derived
+                                          from this existing column using the function `func`.
 
         Returns:
         - pd.DataFrame: The DataFrame with the new column added.
@@ -146,7 +149,10 @@ class PandasToolkit:
         Raises:
         - ValueError: If neither `value` nor `func` is provided.
         """
-        if func is not None:
+        if source_column is not None and source_column in df.columns:
+            # Derive values from an existing column using the provided function
+            df[column_name] = df[source_column].apply(func)
+        elif func is not None:
             # Apply a function row-wise to generate the column values
             df[column_name] = df.apply(func, axis=1)
         elif value is not None:

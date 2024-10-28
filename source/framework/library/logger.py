@@ -10,9 +10,11 @@ import inspect
 import configparser
 from tabulate import tabulate
 
-
 # Internal Modules
 # N/A
+
+# [CONSTANTS]
+LOG_CONFIG_PATH = 'framework/settings/log_settings.ini'
 
 # Class
 class Logger:
@@ -31,12 +33,12 @@ class Logger:
         """ Configuring the logger """
         if not self._initialized:
             try:
-                # Read the config file
+                # Read the settings file
                 config = configparser.ConfigParser(interpolation=None)
-                config_path = os.path.join(os.getcwd(), 'framework/config/log_settings.ini')
+                config_path = os.path.join(os.getcwd(),LOG_CONFIG_PATH)
                 config.read(config_path, encoding='utf-8')
 
-                # Get log settings from the config file
+                # Get log settings from the settings file
                 log_file_name = config.get('log_settings', 'log_file_name')
                 log_file_format = config.get('log_settings', 'log_file_format')
                 log_level = config.get('log_settings', 'log_level')
@@ -63,7 +65,7 @@ class Logger:
                 level = log_level_mapping.get(log_level.upper(), logging.DEBUG)
                 print(f"Log level: {log_level}")
 
-                # Need to config logger
+                # Need to settings logger
                 # Set up logging configuration
                 # Configure the logger
                 logging.basicConfig(

@@ -13,7 +13,7 @@ from source.model.statement_formatter import StatementFormatter
 
 class Statements:
     """
-    Purpose: Blueprint of contains statement from all accounts
+    Purpose: Blueprint of statements contains transactions from all accounts
     Attributes:
         __original_statements : OriginalStatement
     Methods:
@@ -33,40 +33,13 @@ class Statements:
         )
         self.collect_transactions()
 
-    @staticmethod
-    def __format_statements( account:str, statement:pd.DataFrame ) -> pd.DataFrame:
-        """
-        1.
-        :param statement:
-        :return:
-        """
-        LOG.debug(f"{account = } ")
-        LOG.table(table=statement, header=statement.columns)
-
-        statement_formatter = StatementFormatter(account_name=account, statement=statement)
-
-        formated_statement = statement_formatter.get_desired_format()
-
-        if account in ['citi','discover']:
-
-            # Converts expenditure to negative value and payout to positive value
-            formated_statement = PandasToolkit.modify_column(
-                df=formated_statement,
-                column_name='amount',
-                condition=lambda x: True,
-                operation=lambda x: x * -1
-            )
-
-        LOG.info("statements are formatted to the desired format.")
-
-        return formated_statement
-
     def collect_transactions(self) -> None:
         """
         1. Combine all statements into a single dict
         2. Traverse each statement one by one and format statement
         3. Merge the return table into transactions' table
-        returns give all credit card transactions.
+
+        returns give all transactions.
         """
 
         # Combine all statements (merging 2 dict)
@@ -77,10 +50,13 @@ class Statements:
         # Traverse each statement one by one
         for account, statement in statements.items():
 
-            # Formats statement into desired structure
-            formatted_statement = self.__format_statements(
-                account=account,statement=statement
-            )
+            # Creates a statement formater
+            statement_formatter = StatementFormatter(account_name=account, statement=statement)
+
+            # Formated statement from statement formatter
+            formatted_statement = statement_formatter.get_desired_format()
+
+            LOG.info("statements are formatted to the desired format.")
 
             # Adds into an existing transactions table
             self.transactions = PandasToolkit.concat_dataframes(
@@ -88,4 +64,4 @@ class Statements:
                 formatted_statement
             )
 
-        LOG.info("credit_card_transactions table created")
+        LOG.info("transactions table created")
