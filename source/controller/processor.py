@@ -99,7 +99,6 @@ class Processor:
     def _add_c_or_d(self)-> pd.DataFrame:
         """
         # Prerequisites: needs Amount column
-        :return:
         """
 
         # Adds new column c_or_d to database.
@@ -116,7 +115,7 @@ class Processor:
 
     @staticmethod
     def mapper(content:str ,hash_map: dict)-> str:
-        """ """
+        """ Will identify which of the keyword to map the category"""
         content = content.lower()
         for category, keywords in hash_map.items():
             for keyword in keywords:

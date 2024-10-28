@@ -29,7 +29,7 @@ class PandasToolkit:
             return None
 
     @staticmethod
-    def combine_first_column(df :pd.DataFrame,col1 :str, col2 :str, new_column :str) -> pd.DataFrame:
+    def combine_first_column(df :pd.DataFrame,col1 :str, col2 :str, new_column :str)-> pd.DataFrame:
         """
         Merge two columns in a DataFrame into a new column with an optional separator.
 

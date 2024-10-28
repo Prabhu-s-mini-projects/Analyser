@@ -1,6 +1,6 @@
 """
 Class Name: JsonHandler.py
-Blue+print of:Json file
+Blue+print of:JSON file
 """
 # Dependencies
 import os
@@ -21,16 +21,17 @@ def json_handler(func):
         except FileNotFoundError as e:
             print(f"Request failed: {str(e)}")
             LOG.exception(f"{e=}")
+            return None
 
     return wrap_func
 
 # [class]
 class JsonHandler:
     """
-    Purpose: Blueprint of Json file
+    Purpose: Blueprint of JSON file
     Attributes:
         file_path : str
-        data : dict "content in json file"
+        data : dict "content in JSON file"
 
     """
 

@@ -1,8 +1,5 @@
 """ Starting point of program """
-from platform import processor
-
 # Dependencies
-
 # import matplotlib
 # matplotlib.use('TkAgg')
 
