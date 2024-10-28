@@ -67,6 +67,6 @@ class Statements:
         LOG.info("transactions table created")
 
     @staticmethod
-    def future_method(self)-> None:
+    def future_method()-> None:
         """will update in future"""
         print("To handle pylint error")

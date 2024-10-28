@@ -65,7 +65,7 @@ class Processor:
             df=self.__raw_transactions,
             column_name="sub_category",
             source_column='description',
-            func=lambda sub_category_column: self.mapper(sub_category_column,sub_category_mapper.data)
+            func=lambda description: self.mapper(description,sub_category_mapper.data)
         )
 
         LOG.info("sub_category added to transactions")
